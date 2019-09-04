@@ -1,0 +1,83 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SnakeCSharp
+{
+    class SnakeSegment
+    /*класс сегмента змейки*/
+    {
+        private int itsPosX;
+        private int itsPosY;
+        private string itsSymbol;
+
+        public SnakeSegment(int newPosX, int newPosY, string newSymbol)
+        {
+            itsPosX = newPosX;
+            itsPosY = newPosY;
+            itsSymbol = newSymbol;
+        }
+
+        public int getPosX() { return itsPosX; }
+        public int getPosY() { return itsPosY; }
+        public string getSymbol() { return itsSymbol; }
+
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            /*инициализация матрицы поля*/
+            const int fieldSizeX = 20;
+            const int fieldSizeY = 35;
+            const int snakeLenth = 3;
+
+            string[ , ] gameField = new string[fieldSizeX, fieldSizeY];
+
+            MakeField(ref gameField, fieldSizeX, fieldSizeY);
+            DrawScreen(ref gameField, fieldSizeX, fieldSizeY);
+
+            SnakeSegment[] snake = new SnakeSegment[snakeLenth]
+                {new SnakeSegment(2,2,"@"),
+                    new SnakeSegment(2,3,"@"),
+                    new SnakeSegment(2,4,"@")};
+
+            Console.ReadKey();
+        }
+
+        static void MakeField(ref string[ , ] gameField, int fieldSizeX, int fieldSizeY)
+        /*создание границ матрицы*/
+        {
+            for(int i=0; i<fieldSizeX; i++)
+            {
+                for(int j=0; j<fieldSizeY; j++)
+                {
+                    if (i == 0 || j == 0 || i == fieldSizeX - 1 || j == fieldSizeY - 1)
+                    {
+                        gameField[i ,j] = "*";
+                    }
+                    else
+                    {
+                        gameField[i, j] = " ";
+                    }
+                }
+            }
+        }
+
+        static void DrawScreen(ref string[ , ] gameField, int fieldSizeX, int fieldSizeY)
+        /*вывод изображения в консоль*/
+        {
+            for(int i=0; i<fieldSizeX; i++)
+            {
+                for (int j=0; j<fieldSizeY; j++)
+                {
+                    Console.Write(gameField[i, j]);
+                }
+                Console.Write("\n");
+            }
+        }
+    }
+}

@@ -3,85 +3,78 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
-namespace SnakeCSharp
+namespace Snake
 {
     class SnakeSegment
-    /*класс сегмента змейки*/
     {
-        private int itsPosX;
-        private int itsPosY;
-        private string itsSymbol;
+        public int itsPosX, itsPosY, itsSize;
+        public static int lenght = 0;
 
-        public SnakeSegment(int newPosX, int newPosY, string newSymbol)
+        public SnakeSegment(int newPosX, int newPosY, int newSize)
         {
             itsPosX = newPosX;
             itsPosY = newPosY;
-            itsSymbol = newSymbol;
+            itsSize = newSize;
+            lenght++;
         }
 
-        public int getPosX() { return itsPosX; }
-        public int getPosY() { return itsPosY; }
-        public string getSymbol() { return itsSymbol; }
+        public int GetX() {return itsPosX; }
+        public int GetY() { return itsPosY; }
+        public int GetSize() { return itsSize; }
+        public void SetPos(int X, int Y)
+        {
+            itsPosX = X;
+            itsPosY = Y;
+        }
 
+    }
+
+    class Snake
+    {
+        private int itsLenght;
+        private SnakeSegment[] itsSegments;
+
+        public Snake(int lenght, SnakeSegment[] segments)
+        {
+            itsLenght = lenght;
+            itsSegments = segments;
+        }
+
+        public int GetLenth() { return itsLenght; }
+        public void moveSegments(int newPosX, int newPosY)
+        {
+            itsSegments[0].SetPos(newPosX, newPosY);
+            for (int i=itsLenght; i>0; i--)
+            {
+                itsSegments[i].SetPos(itsSegments[i - 1].GetX(), itsSegments[i - 1].GetY());
+            }
+        }
+        public void showSegs()
+        {
+            foreach(SnakeSegment segment in itsSegments)
+            {
+                Console.Write(segment.GetX().ToString());
+                Console.Write(segment.GetY().ToString());
+            }
+        }
     }
 
     class Program
     {
+
         static void Main(string[] args)
         {
-            /*инициализация матрицы поля*/
-            const int fieldSizeX = 20;
-            const int fieldSizeY = 35;
-            const int snakeLenth = 3;
+            const int segSize = 20;
+            SnakeSegment[] segments = new SnakeSegment[3]
+                { new SnakeSegment(0, 1, segSize),
+                    new SnakeSegment(0, 2, segSize),
+                    new SnakeSegment(0, 3, segSize)};
 
-            string[ , ] gameField = new string[fieldSizeX, fieldSizeY];
-
-            MakeField(ref gameField, fieldSizeX, fieldSizeY);
-            DrawScreen(ref gameField, fieldSizeX, fieldSizeY);
-
-            SnakeSegment[] snake = new SnakeSegment[snakeLenth]
-                {new SnakeSegment(2,2,"@"),
-                    new SnakeSegment(2,3,"@"),
-                    new SnakeSegment(2,4,"@")};
-
+            Snake snake = new Snake(SnakeSegment.lenght, segments);
+            snake.showSegs();
             Console.ReadKey();
-        }
-
-        static void MakeField(ref string[ , ] gameField, int fieldSizeX, int fieldSizeY, SnakeSegment[] snake)
-        /*создание границ матрицы*/
-        {
-            for(int i=0; i<fieldSizeX; i++)
-            {
-                for(int j=0; j<fieldSizeY; j++)
-                {
-                    if (i == 0 || j == 0 || i == fieldSizeX - 1 || j == fieldSizeY - 1)
-                    {
-                        gameField[i ,j] = "*";
-                    }
-                    else
-                    {
-                        gameField[i, j] = " ";
-                    }
-                }
-            }
-            foreach (SnakeSegment segment in snake)
-            {
-                gameField[segment.getPosX(), segment.getPosY()] = snake.getSymbol(); //здесь ошибка
-            }
-        }
-
-        static void DrawScreen(ref string[ , ] gameField, int fieldSizeX, int fieldSizeY)
-        /*вывод изображения в консоль*/
-        {
-            for(int i=0; i<fieldSizeX; i++)
-            {
-                for (int j=0; j<fieldSizeY; j++)
-                {
-                    Console.Write(gameField[i, j]);
-                }
-                Console.Write("\n");
-            }
         }
     }
 }

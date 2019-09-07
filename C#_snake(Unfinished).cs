@@ -4,26 +4,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace Snake
 {
     class SnakeSegment
     {
-        public int itsPosX, itsPosY, itsSize;
+        private int itsPosX, itsPosY;
+        private string itsChar;
         public static int length = 0;
+        
 
-        public SnakeSegment(int newPosX, int newPosY, int newSize)
+        public SnakeSegment(int newPosX, int newPosY, string newChar)
         /* Конструктор */
         {
             itsPosX = newPosX;
             itsPosY = newPosY;
-            itsSize = newSize;
+            itsChar = newChar;
             length++;
         }
 
         public int GetX() {return itsPosX; }
         public int GetY() { return itsPosY; }
-        public int GetSize() { return itsSize; }
+        public string GetChar() { return itsChar; }
         public void SetPos(int X, int Y)
         {
             itsPosX = X;
@@ -35,13 +38,13 @@ namespace Snake
     class Snake
     {
         private SnakeSegment[] itsSegments;
-        private int segSize;
+        private string segChar;
 
-        public Snake(SnakeSegment[] segments, int segSize)
+        public Snake(SnakeSegment[] segments, string segChar)
         /* Конструктор */
         {
             itsSegments = segments;
-            this.segSize = segSize;
+            this.segChar = segChar;
         }
         public void MoveSegments(int newPosX, int newPosY)
         {
@@ -54,7 +57,7 @@ namespace Snake
         public void AddSegment()
         {
             Array.Resize(ref itsSegments, SnakeSegment.length + 1);
-            itsSegments[SnakeSegment.length] = new SnakeSegment(-10, -10, segSize); //дада, костыль, но рабочий
+            itsSegments[SnakeSegment.length] = new SnakeSegment(-10, -10, segChar); //дада, костыль, но рабочий
         }
 
         public int GetFirstX() { return itsSegments[0].GetX(); }
@@ -86,19 +89,70 @@ namespace Snake
         public int GetY() { return itsPosY; }
     }
 
+    class Graphics
+    {
+        private int sizeX;
+        private int sizeY;
+        private string[,] gameField;
+        public Graphics(int sizeX, int sizeY)
+        {
+            this.sizeX = sizeX;
+            this.sizeY = sizeY;
+            gameField = new string[sizeX, sizeY];
+            for (int x = 0; x < sizeX; x++)
+            {
+                for (int y = 0; y < sizeY; y++)
+                {
+                    if (x == 0 || y == 0 || x == sizeX - 1 || y == sizeY - 1)
+                    {
+                        gameField[x, y] = "*";
+                    }
+                    else
+                    {
+                        gameField[x, y] = " ";
+                    }
+                }
+            }
+        }
+
+        public void Update(Snake segments, Apple apple)
+        {
+
+        }
+
+        public void Draw()
+        {
+            Console.Clear();
+            for (int x=0; x<sizeX; x++)
+            {
+                for(int y=0; y<sizeY; y++)
+                {
+                    Console.Write(gameField[x, y]);
+                    Console.Write(" ");
+                }
+                Console.Write("\n");
+            }
+        }
+    }
+
     class Program
     {
 
         static void Main(string[] args)
         {
-            const int segSize = 20;
+            string segChar = "%";
             SnakeSegment[] segments = new SnakeSegment[3]
-                { new SnakeSegment(0, 3, segSize),
-                    new SnakeSegment(0, 2, segSize),
-                    new SnakeSegment(0, 1, segSize)};
+                { new SnakeSegment(3, 7, segChar),
+                    new SnakeSegment(3, 6, segChar),
+                    new SnakeSegment(3, 5, segChar)}; // тоже по факту костыль, но ладно
 
-            Snake snake = new Snake(segments, segSize);
+            Snake snake = new Snake(segments, segChar);
             snake.showSegs();
+
+            Apple apple = new Apple(10, 10);
+
+            Graphics g = new Graphics(15, 30);
+            g.Draw();
 
             int dir;
             while (true)

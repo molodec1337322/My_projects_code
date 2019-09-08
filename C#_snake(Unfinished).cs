@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Drawing;
-using System.Windows.Forms;
 
 namespace Snake
 {
@@ -13,7 +11,7 @@ namespace Snake
         private int itsPosX, itsPosY;
         private string itsChar;
         public static int length = 0;
-        
+
 
         public SnakeSegment(int newPosX, int newPosY, string newChar)
         /* Конструктор */
@@ -24,7 +22,7 @@ namespace Snake
             length++;
         }
 
-        public int GetX() {return itsPosX; }
+        public int GetX() { return itsPosX; }
         public int GetY() { return itsPosY; }
         public string GetChar() { return itsChar; }
         public void SetPos(int X, int Y)
@@ -48,7 +46,7 @@ namespace Snake
         }
         public void MoveSegments(int newPosX, int newPosY)
         {
-            for (int i=SnakeSegment.length-1; i>0; i--)
+            for (int i = SnakeSegment.length - 1; i > 0; i--)
             {
                 itsSegments[i].SetPos(itsSegments[i - 1].GetX(), itsSegments[i - 1].GetY());
             }
@@ -57,7 +55,7 @@ namespace Snake
         public void AddSegment()
         {
             Array.Resize(ref itsSegments, SnakeSegment.length + 1);
-            itsSegments[SnakeSegment.length] = new SnakeSegment(-10, -10, segChar); 
+            itsSegments[SnakeSegment.length] = new SnakeSegment(-10, -10, segChar);
         }
 
         public int GetFirstX() { return itsSegments[0].GetX(); }
@@ -68,7 +66,7 @@ namespace Snake
 
         public void showSegs()
         {
-            foreach(SnakeSegment segment in itsSegments)
+            foreach (SnakeSegment segment in itsSegments)
             {
                 Console.Write(segment.GetX().ToString());
                 Console.Write(" ");
@@ -105,10 +103,8 @@ namespace Snake
             this.sizeY = sizeY;
             this.snake = snake;
             gameField = new string[sizeX, sizeY];
-        }
 
-        public void Update()
-        {
+            //первичное заполнение поля
             for (int x = 0; x < sizeX; x++)
             {
                 for (int y = 0; y < sizeY; y++)
@@ -123,7 +119,19 @@ namespace Snake
                     }
                 }
             }
-            for (int i=0; i<SnakeSegment.length; i++)
+
+        }
+
+        public void Update()
+        {
+            for (int x = 1; x < sizeX-1; x++)
+            {
+                for (int y = 1; y < sizeY-1; y++)
+                {
+                    gameField[x, y] = " ";
+                }
+            }
+            for (int i = 0; i < SnakeSegment.length; i++)
             {
                 gameField[snake.GetSegment(i).GetX(), snake.GetSegment(i).GetY()] = snake.GetSegment(i).GetChar();
             }
@@ -133,9 +141,9 @@ namespace Snake
         {
             Update();
             Console.Clear();
-            for (int x=0; x<sizeX; x++)
+            for (int x = 0; x < sizeX; x++)
             {
-                for(int y=0; y<sizeY; y++)
+                for (int y = 0; y < sizeY; y++)
                 {
                     Console.Write(gameField[x, y]);
                     Console.Write(" ");
@@ -164,32 +172,35 @@ namespace Snake
             Graphics g = new Graphics(15, 30, snake);
             g.Draw();
 
-            int dir;
+            ConsoleKeyInfo dir;
             while (true)
             {
-                dir = int.Parse(Console.ReadLine());
-                switch(dir)
+                dir = Console.ReadKey();
+                if(dir.Key == ConsoleKey.D2)
                 {
-                    case 2:
-                        snake.MoveSegments(snake.GetFirstX() + 1, snake.GetFirstY());
-                        g.Draw();
-                        break;
-                    case 8:
-                        snake.MoveSegments(snake.GetFirstX() - 1, snake.GetFirstY());
-                        g.Draw();
-                        break;
-                    case 6:
-                        snake.MoveSegments(snake.GetFirstX(), snake.GetFirstY() + 1);
-                        g.Draw();
-                        break;
-                    case 4:
-                        snake.MoveSegments(snake.GetFirstX(), snake.GetFirstY() - 1);
-                        g.Draw();
-                        break;
-                    default:
-                        Console.WriteLine("Error");
-                        break;
+                    snake.MoveSegments(snake.GetFirstX() + 1, snake.GetFirstY());
+                    g.Draw();
                 }
+                else if(dir.Key == ConsoleKey.D8)
+                {
+                    snake.MoveSegments(snake.GetFirstX() - 1, snake.GetFirstY());
+                    g.Draw();
+                }
+                else if(dir.Key == ConsoleKey.D6)
+                {
+                    snake.MoveSegments(snake.GetFirstX(), snake.GetFirstY() + 1);
+                    g.Draw();
+                }
+                else if(dir.Key == ConsoleKey.D4)
+                {
+                    snake.MoveSegments(snake.GetFirstX(), snake.GetFirstY() - 1);
+                    g.Draw();
+                }
+                else
+                {
+                    
+                }
+                
             }
         }
     }

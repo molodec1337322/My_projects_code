@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
+
 
 namespace Snake
 {
@@ -66,7 +64,7 @@ namespace Snake
             {
                 return false;
             }
-            for(int i=1; i<SnakeSegment.length; i++)
+            for (int i = 1; i < SnakeSegment.length; i++)
             {
                 if (itsSegments[0].GetX() == itsSegments[i].GetX() && itsSegments[0].GetY() == itsSegments[i].GetY())
                 {
@@ -97,8 +95,8 @@ namespace Snake
 
         public void Relocate()
         {
-            itsPosX = rnd.Next()%13+1;
-            itsPosY = rnd.Next()%28+1;
+            itsPosX = rnd.Next() % 13 + 1;
+            itsPosY = rnd.Next() % 28 + 1;
         }
 
         public int GetX() { return itsPosX; }
@@ -167,6 +165,39 @@ namespace Snake
 
     class Program
     {
+        static public void WaitForPressKey(int timer, ref string dir)
+        {
+            ConsoleKeyInfo key;
+            while (timer != 0)
+            {
+                if(Console.KeyAvailable)
+                {
+                    key = Console.ReadKey();
+                    if(key.Key == ConsoleKey.RightArrow)
+                    {
+                        dir = "Right";
+                        break;
+                    }
+                    else if (key.Key == ConsoleKey.LeftArrow)
+                    {
+                        dir = "Left";
+                        break;
+                    }
+                    else if (key.Key == ConsoleKey.UpArrow)
+                    {
+                        dir = "Up";
+                        break;
+                    }
+                    else if (key.Key == ConsoleKey.DownArrow)
+                    {
+                        dir = "Down";
+                        break;
+                    }
+                }
+                Thread.Sleep(100);
+                timer--;
+            }
+        }
 
         static void Main(string[] args)
         {
@@ -180,65 +211,45 @@ namespace Snake
             Random rnd = new Random();
 
             Snake snake = new Snake(ref segments, segChar);
-            
+
             Apple apple = new Apple(10, 10, "A", rnd);
-            
+
             Graphics g = new Graphics(15, 30, snake, apple);
             g.Draw();
-            
 
-            
-            ConsoleKeyInfo dir;
+            ConsoleKeyInfo key;
+            string dir = "Right";
+
             while (snake.CheckSnakeAlive())
             {
-                dir = Console.ReadKey();
-                if(dir.Key == ConsoleKey.DownArrow)
-                {
-                    snake.MoveSegments(snake.GetFirstX() + 1, snake.GetFirstY());
-                    if(snake.GetFirstX() == apple.GetX() && snake.GetFirstY() == apple.GetY())
-                    {
-                        snake.AddSegment();
-                        apple.Relocate();
-                    }
-                    g.Draw();
-                }
-                else if(dir.Key == ConsoleKey.UpArrow)
-                {
-                    snake.MoveSegments(snake.GetFirstX() - 1, snake.GetFirstY());
-                    if (snake.GetFirstX() == apple.GetX() && snake.GetFirstY() == apple.GetY())
-                    {
-                        snake.AddSegment();
-                        apple.Relocate();
-                    }
-                    g.Draw();
-                }
-                else if(dir.Key == ConsoleKey.RightArrow)
+                WaitForPressKey(2, ref dir);
+
+                if (dir == "Right")
                 {
                     snake.MoveSegments(snake.GetFirstX(), snake.GetFirstY() + 1);
-                    if (snake.GetFirstX() == apple.GetX() && snake.GetFirstY() == apple.GetY())
-                    {
-                        snake.AddSegment();
-                        apple.Relocate();
-                    }
-                    g.Draw();
                 }
-                else if(dir.Key == ConsoleKey.LeftArrow)
+                else if (dir == "Left")
                 {
                     snake.MoveSegments(snake.GetFirstX(), snake.GetFirstY() - 1);
-                    if (snake.GetFirstX() == apple.GetX() && snake.GetFirstY() == apple.GetY())
-                    {
-                        snake.AddSegment();
-                        apple.Relocate();
-                    }
-                    g.Draw();
                 }
-                else
+                else if (dir == "Up")
                 {
-                    
+                    snake.MoveSegments(snake.GetFirstX() - 1, snake.GetFirstY());
                 }
-                
+                else if (dir == "Down")
+                {
+                    snake.MoveSegments(snake.GetFirstX() + 1, snake.GetFirstY());
+                }
+
+                if (snake.GetFirstX() == apple.GetX() && snake.GetFirstY() == apple.GetY())
+                {
+                    snake.AddSegment();
+                    apple.Relocate();
+                }
+
+                g.Draw();
             }
-            
+
         }
     }
 }

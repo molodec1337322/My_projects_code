@@ -57,11 +57,15 @@ namespace Snake
         public void AddSegment()
         {
             Array.Resize(ref itsSegments, SnakeSegment.length + 1);
-            itsSegments[SnakeSegment.length] = new SnakeSegment(-10, -10, segChar); //дада, костыль, но рабочий
+            itsSegments[SnakeSegment.length] = new SnakeSegment(-10, -10, segChar); 
         }
 
         public int GetFirstX() { return itsSegments[0].GetX(); }
         public int GetFirstY() { return itsSegments[0].GetY(); }
+        public SnakeSegment GetSegment(int index) { return itsSegments[index]; }// возвращает элемент змейки с индексом index
+
+
+
         public void showSegs()
         {
             foreach(SnakeSegment segment in itsSegments)
@@ -93,12 +97,18 @@ namespace Snake
     {
         private int sizeX;
         private int sizeY;
+        private Snake snake;
         private string[,] gameField;
-        public Graphics(int sizeX, int sizeY)
+        public Graphics(int sizeX, int sizeY, Snake snake)
         {
             this.sizeX = sizeX;
             this.sizeY = sizeY;
+            this.snake = snake;
             gameField = new string[sizeX, sizeY];
+        }
+
+        public void Update()
+        {
             for (int x = 0; x < sizeX; x++)
             {
                 for (int y = 0; y < sizeY; y++)
@@ -113,15 +123,15 @@ namespace Snake
                     }
                 }
             }
-        }
-
-        public void Update(Snake segments, Apple apple)
-        {
-
+            for (int i=0; i<SnakeSegment.length; i++)
+            {
+                gameField[snake.GetSegment(i).GetX(), snake.GetSegment(i).GetY()] = snake.GetSegment(i).GetChar();
+            }
         }
 
         public void Draw()
         {
+            Update();
             Console.Clear();
             for (int x=0; x<sizeX; x++)
             {
@@ -142,7 +152,7 @@ namespace Snake
         {
             string segChar = "%";
             SnakeSegment[] segments = new SnakeSegment[3]
-                { new SnakeSegment(3, 7, segChar),
+                { new SnakeSegment(3, 7, "#"),
                     new SnakeSegment(3, 6, segChar),
                     new SnakeSegment(3, 5, segChar)}; // тоже по факту костыль, но ладно
 
@@ -151,7 +161,7 @@ namespace Snake
 
             Apple apple = new Apple(10, 10);
 
-            Graphics g = new Graphics(15, 30);
+            Graphics g = new Graphics(15, 30, snake);
             g.Draw();
 
             int dir;
@@ -162,19 +172,19 @@ namespace Snake
                 {
                     case 2:
                         snake.MoveSegments(snake.GetFirstX() + 1, snake.GetFirstY());
-                        snake.showSegs();
+                        g.Draw();
                         break;
                     case 8:
                         snake.MoveSegments(snake.GetFirstX() - 1, snake.GetFirstY());
-                        snake.showSegs();
+                        g.Draw();
                         break;
                     case 6:
                         snake.MoveSegments(snake.GetFirstX(), snake.GetFirstY() + 1);
-                        snake.showSegs();
+                        g.Draw();
                         break;
                     case 4:
                         snake.MoveSegments(snake.GetFirstX(), snake.GetFirstY() - 1);
-                        snake.showSegs();
+                        g.Draw();
                         break;
                     default:
                         Console.WriteLine("Error");
@@ -182,6 +192,5 @@ namespace Snake
                 }
             }
         }
-
     }
 }

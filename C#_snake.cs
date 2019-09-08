@@ -111,6 +111,8 @@ namespace Snake
         private Snake snake;
         private Apple apple;
         private string[,] gameField;
+        int score;
+        string strScore;
         public Graphics(int sizeX, int sizeY, Snake snake, Apple apple)
         {
             this.sizeX = sizeX;
@@ -149,6 +151,8 @@ namespace Snake
 
         public void Draw()
         {
+            score = SnakeSegment.length - 4;
+            strScore = score.ToString();
             Update();
             Console.Clear();
             for (int x = 0; x < sizeX; x++)
@@ -160,6 +164,7 @@ namespace Snake
                 }
                 Console.Write("\n");
             }
+            Console.WriteLine($"\nScore:{strScore}");
         }
     }
 
@@ -249,10 +254,9 @@ namespace Snake
 
                 g.Draw();
             }
-            int score = SnakeSegment.length - 4;
-            string strScore = score.ToString();
-            Console.WriteLine($"GAME OVER!\nScore:{strScore}");
+            Console.WriteLine($"GAME OVER!");
             Console.ReadKey();
         }
     }
 }
+

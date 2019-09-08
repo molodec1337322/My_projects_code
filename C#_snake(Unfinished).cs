@@ -44,6 +44,7 @@ namespace Snake
             itsSegments = segments;
             this.segChar = segChar;
         }
+
         public void MoveSegments(int newPosX, int newPosY)
         {
             for (int i = SnakeSegment.length - 1; i > 0; i--)
@@ -52,10 +53,11 @@ namespace Snake
             }
             itsSegments[0].SetPos(newPosX, newPosY);
         }
+
         public void AddSegment()
         {
             Array.Resize(ref itsSegments, SnakeSegment.length + 1);
-            itsSegments[SnakeSegment.length - 1] = new SnakeSegment(-10, -10, segChar);
+            itsSegments[SnakeSegment.length] = new SnakeSegment(itsSegments[SnakeSegment.length - 1].GetX(), itsSegments[SnakeSegment.length - 1].GetY(), segChar);
         }
 
         public bool CheckSnakeAlive()
@@ -178,13 +180,14 @@ namespace Snake
             Random rnd = new Random();
 
             Snake snake = new Snake(ref segments, segChar);
-
+            
             Apple apple = new Apple(10, 10, "A", rnd);
-
-
+            
             Graphics g = new Graphics(15, 30, snake, apple);
             g.Draw();
+            
 
+            
             ConsoleKeyInfo dir;
             while (snake.CheckSnakeAlive())
             {
@@ -235,6 +238,7 @@ namespace Snake
                 }
                 
             }
+            
         }
     }
 }

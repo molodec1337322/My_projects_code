@@ -60,7 +60,7 @@ namespace Snake
 
         public bool CheckSnakeAlive()
         {
-            if (itsSegments[0].GetX() == 0 || itsSegments[0].GetY() == 0 || itsSegments[0].GetX() == 14 || itsSegments[0].GetY() == 29)
+            if (itsSegments[0].GetX() == 0 || itsSegments[0].GetY() == 0 || itsSegments[0].GetX() == 14 || itsSegments[0].GetY() == 24)
             {
                 return false;
             }
@@ -249,7 +249,10 @@ namespace Snake
 
                 g.Draw();
             }
-
+            int score = SnakeSegment.length - 4;
+            string strScore = score.ToString();
+            Console.WriteLine($"GAME OVER!\nScore:{strScore}");
+            Console.ReadKey();
         }
     }
 }

@@ -96,7 +96,7 @@ namespace Snake
         public void Relocate()
         {
             itsPosX = rnd.Next() % 13 + 1;
-            itsPosY = rnd.Next() % 28 + 1;
+            itsPosY = rnd.Next() % 23 + 1;
         }
 
         public int GetX() { return itsPosX; }
@@ -214,7 +214,7 @@ namespace Snake
 
             Apple apple = new Apple(10, 10, "A", rnd);
 
-            Graphics g = new Graphics(15, 30, snake, apple);
+            Graphics g = new Graphics(15, 25, snake, apple);
             g.Draw();
 
             ConsoleKeyInfo key;

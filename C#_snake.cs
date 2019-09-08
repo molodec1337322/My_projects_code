@@ -170,6 +170,13 @@ namespace Snake
 
     class Program
     {
+        static public void WaitForExit()
+        {
+            while(true)
+            {
+                Console.ReadKey();
+            }
+        }
         static public void WaitForPressKey(int timer, ref string dir)
         {
             ConsoleKeyInfo key;
@@ -255,7 +262,7 @@ namespace Snake
                 g.Draw();
             }
             Console.WriteLine($"GAME OVER!");
-            Console.ReadKey();
+            WaitForExit();
         }
     }
 }

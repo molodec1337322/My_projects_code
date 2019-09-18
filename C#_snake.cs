@@ -1,19 +1,25 @@
 using System;
 using System.Threading;
 
-//переделать
 
 namespace Snake
 {
+    /// <summary>
+    /// 
+    /// класс сегмента змейки 
+    /// 
+    /// </summary>
     class SnakeSegment
     {
-        private int itsPosX, itsPosY;
-        private string itsChar;
-        public static int length = 0;
+        protected int itsPosX, itsPosY;
+        protected string itsChar;
+        public static int length = -1;// -1 нужен, что бы учитывались только элементы змейки, а не яблока,
+                                      // тк класс яблока наследуется от класса сегмента змейки,
+                                      // в результате чего, при создания объекта яблока и 4 сегментов змейки
+                                      // length равен 5, а не 4, как и должно быть
 
 
         public SnakeSegment(int newPosX, int newPosY, string newChar)
-        /* Конструктор */
         {
             itsPosX = newPosX;
             itsPosY = newPosY;
@@ -32,13 +38,17 @@ namespace Snake
 
     }
 
+    /// <summary>
+    /// 
+    /// класс змейки
+    /// 
+    /// </summary>
     class Snake
     {
         private SnakeSegment[] itsSegments;
         private string segChar;
 
         public Snake(ref SnakeSegment[] segments, string segChar)
-        /* Конструктор */
         {
             itsSegments = segments;
             this.segChar = segChar;
@@ -80,17 +90,16 @@ namespace Snake
         public SnakeSegment GetSegment(int index) { return itsSegments[index]; }// возвращает элемент змейки с индексом index
     }
 
-    class Apple
+    /// <summary>
+    /// 
+    /// Класс Яблока
+    /// 
+    /// </summary>
+    class Apple : SnakeSegment
     {
-        private int itsPosX;
-        private int itsPosY;
-        private string itsChar;
         private Random rnd;
-        public Apple(int newPosX, int newPosY, string newChar, Random rnd)
+        public Apple(int newPosX, int newPosY, string newChar, Random rnd) : base(newPosX, newPosY, newChar)
         {
-            itsPosX = newPosX;
-            itsPosY = newPosY;
-            itsChar = newChar;
             this.rnd = rnd;
         }
 
@@ -99,12 +108,13 @@ namespace Snake
             itsPosX = rnd.Next() % 13 + 1;
             itsPosY = rnd.Next() % 23 + 1;
         }
-
-        public int GetX() { return itsPosX; }
-        public int GetY() { return itsPosY; }
-        public string GetChar() { return itsChar; }
     }
 
+    /// <summary>
+    /// 
+    /// класс вывода изображения в консоль
+    /// 
+    /// </summary>
     class Graphics
     {
         private int sizeX;
@@ -122,7 +132,6 @@ namespace Snake
             this.apple = apple;
             gameField = new string[sizeX, sizeY];
 
-            //первичное заполнение поля
             for (int x = 0; x < sizeX; x++)
             {
                 for (int y = 0; y < sizeY; y++)
@@ -140,7 +149,12 @@ namespace Snake
 
         }
 
-        public void Update()
+        /// <summary>
+        /// 
+        /// обновляет расположение объектов на экране
+        /// 
+        /// </summary>
+        private void Update()
         {
             for (int i = 0; i < SnakeSegment.length; i++)
             {
@@ -149,7 +163,12 @@ namespace Snake
             gameField[snake.GetSegment(SnakeSegment.length - 1).GetX(), snake.GetSegment(SnakeSegment.length - 1).GetY()] = " ";
             gameField[apple.GetX(), apple.GetY()] = apple.GetChar();
         }
-
+        
+        /// <summary>
+        /// 
+        /// отрисовывает изображение в консоль
+        /// 
+        /// </summary>
         public void Draw()
         {
             score = SnakeSegment.length - 4;
@@ -173,37 +192,38 @@ namespace Snake
     {
         static public void WaitForExit()
         {
-            while(true)
+            while (true)
             {
                 Console.ReadKey();
             }
         }
-        static public void WaitForPressKey(int timer, ref string dir)
+
+        static public void WaitForPressKey(int timer, ref Direction dir)
         {
             ConsoleKeyInfo key;
             while (timer != 0)
             {
-                if(Console.KeyAvailable)
+                if (Console.KeyAvailable)
                 {
                     key = Console.ReadKey();
-                    if(key.Key == ConsoleKey.RightArrow)
+                    if (key.Key == ConsoleKey.RightArrow)
                     {
-                        dir = "Right";
+                        dir = Direction.Right;
                         break;
                     }
                     else if (key.Key == ConsoleKey.LeftArrow)
                     {
-                        dir = "Left";
+                        dir = Direction.Left;
                         break;
                     }
                     else if (key.Key == ConsoleKey.UpArrow)
                     {
-                        dir = "Up";
+                        dir = Direction.Up;
                         break;
                     }
                     else if (key.Key == ConsoleKey.DownArrow)
                     {
-                        dir = "Down";
+                        dir = Direction.Down;
                         break;
                     }
                 }
@@ -211,19 +231,19 @@ namespace Snake
                 timer--;
             }
         }
-        
-        
-        // переделать с enum
-        enum Direction { Right, Left, Up, Down };
+
+        public enum Direction { Right, Left, Up, Down };
 
         static void Main(string[] args)
         {
+
+
             string segChar = "0";
             SnakeSegment[] segments = new SnakeSegment[4]
                 { new SnakeSegment(3, 7, "#"),
                     new SnakeSegment(3, 6, segChar),
                     new SnakeSegment(3, 5, segChar),
-                    new SnakeSegment(3, 4, segChar)}; // тоже по факту костыль, но ладно
+                    new SnakeSegment(3, 4, segChar)}; 
 
             Random rnd = new Random();
 
@@ -235,25 +255,25 @@ namespace Snake
             g.Draw();
 
             ConsoleKeyInfo key;
-            string dir = "Right";
+            Direction dir = 0;
 
             while (snake.CheckSnakeAlive())
             {
                 WaitForPressKey(2, ref dir);
 
-                if (dir == "Right")
+                if (dir == Direction.Right)
                 {
                     snake.MoveSegments(snake.GetFirstX(), snake.GetFirstY() + 1);
                 }
-                else if (dir == "Left")
+                else if (dir == Direction.Left)
                 {
                     snake.MoveSegments(snake.GetFirstX(), snake.GetFirstY() - 1);
                 }
-                else if (dir == "Up")
+                else if (dir == Direction.Up)
                 {
                     snake.MoveSegments(snake.GetFirstX() - 1, snake.GetFirstY());
                 }
-                else if (dir == "Down")
+                else if (dir == Direction.Down)
                 {
                     snake.MoveSegments(snake.GetFirstX() + 1, snake.GetFirstY());
                 }

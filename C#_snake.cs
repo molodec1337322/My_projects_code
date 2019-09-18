@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 
+//переделать
 
 namespace Snake
 {

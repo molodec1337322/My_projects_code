@@ -210,6 +210,10 @@ namespace Snake
                 timer--;
             }
         }
+        
+        
+        // переделать с enum
+        enum Direction { Right, Left, Up, Down };
 
         static void Main(string[] args)
         {

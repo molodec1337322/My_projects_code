@@ -1,4 +1,6 @@
+#include "pch.h"
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -30,7 +32,7 @@ bool checkLeap(int year)
 	if (year % 4 == 0 && year % 100 != 0) return true;
 	return false;
 }
- // проверяет дату на корректность ввода
+// проверяет дату на корректность ввода
 bool checkDateCorrect(int years, int months, int days)
 {
 	if (months <= 12 && months > 0)
@@ -76,11 +78,11 @@ int countDays(int years, int months, int days)
 	for (int i = 1; i < months; i++)
 	{
 		if (i == 4 || i == 6 || i == 9 || i == 11) daysCount += 30;
-		else if (i == 2 && checkLeap(years)) daysCount += 29;
+		else if (i == 2 && checkLeap(years)) daysCount += 28;
 		else if (i == 2 && !checkLeap(years)) daysCount += 28;
 		else daysCount += 31;
 	}
-	
+
 	daysCount += years * 365 + (years / 4 - 13);
 
 	return daysCount;
@@ -95,7 +97,7 @@ int main()
 	int formattedDate[maxWords]; //дата, разбитая на 3 элемента и записанная в int'овском формате (в фомате дд/мм/гггг)
 
 	cin >> date;
-	
+
 	splitToInt(date, maxWords, formattedDate, '.');
 
 
@@ -111,5 +113,14 @@ int main()
 		return 0;
 	}
 
+	if (checkLeap(years)) {
+		if (months < 3) {
+			cout << weekDays[(countDays(years, months, days) + 2) % 7];
+		}
+		else {
+			cout << weekDays[(countDays(years, months, days) + 3) % 7];
+		}
+		return 0;
+	}
 	cout << weekDays[(countDays(years, months, days) + 3) % 7];
 }

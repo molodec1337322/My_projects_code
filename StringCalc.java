@@ -42,6 +42,11 @@ class ParseEngine{
         evalLowPriority();
     }
 
+    private void checkCorectness(){
+        if(evalNumbers.isEmpty()) evalNumbers.add("No value");
+        else if(evalNumbers.size() == evalOperands.size()) evalNumbers.add("1");
+    }
+
     private void addOperand(int index){
         if(temp.length() != 0){
             evalNumbers.add(temp.toString());
@@ -67,7 +72,7 @@ class ParseEngine{
     private void parseString(){
         for(int i = 0; i < example.length(); i++){
             if(example.charAt(i) == '+' || example.charAt(i) == '-' ||
-                example.charAt(i) == '*' || example.charAt(i) == '/') addOperand(i);
+                    example.charAt(i) == '*' || example.charAt(i) == '/') addOperand(i);
             else temp.append(example.charAt(i));
 
             if(i == example.length() - 1){
@@ -77,6 +82,7 @@ class ParseEngine{
                 }
             }
         }
+        checkCorectness();
     }
 
     private int countOperands(Operation operandFirst, Operation operandSecond){
@@ -89,17 +95,17 @@ class ParseEngine{
 
     private void evalHighPriority(){
         int i = 0;
-        Double tempResult;
+        double tempResult;
         while(countOperands(Operation.Multiply, Operation.Division) != 0){
             if(evalOperands.get(i) == Operation.Multiply){
                 tempResult = Double.parseDouble(evalNumbers.get(i)) * Double.parseDouble(evalNumbers.get(i+1));
-                evalNumbers.set(i, tempResult.toString());
+                evalNumbers.set(i, String.valueOf(tempResult));
                 evalNumbers.remove(i+1);
                 evalOperands.remove(i);
             }
             else if(evalOperands.get(i) == Operation.Division){
                 tempResult = Double.parseDouble(evalNumbers.get(i)) / Double.parseDouble(evalNumbers.get(i+1));
-                evalNumbers.set(i, tempResult.toString());
+                evalNumbers.set(i, String.valueOf(tempResult));
                 evalNumbers.remove(i+1);
                 evalOperands.remove(i);
             }
@@ -111,7 +117,7 @@ class ParseEngine{
 
     private void evalLowPriority(){
         int i = 0;
-        Object tempResult;
+        double tempResult;
         while(countOperands(Operation.Plus, Operation.Minus) != 0){
             if(evalOperands.get(i) == Operation.Plus){
                 tempResult = Double.parseDouble(evalNumbers.get(i)) + Double.parseDouble(evalNumbers.get(i+1));
@@ -131,7 +137,7 @@ class ParseEngine{
         }
     }
 
-    public void getResult(){
-        System.out.println(evalNumbers.get(0));
+    public String getResult(){
+        return evalNumbers.get(0);
     }
 }

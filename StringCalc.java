@@ -38,8 +38,7 @@ class ParseEngine{
         evalNumbers.clear();
         evalOperands.clear();
         parseString();
-        evalHighPriority();
-        evalLowPriority();
+        eval();
     }
 
     private void checkCorectness(){
@@ -93,18 +92,20 @@ class ParseEngine{
         return count;
     }
 
-    private void evalHighPriority(){
+    private void eval(){
         int i = 0;
         double tempResult;
         while(countOperands(Operation.Multiply, Operation.Division) != 0){
             if(evalOperands.get(i) == Operation.Multiply){
-                tempResult = Double.parseDouble(evalNumbers.get(i)) * Double.parseDouble(evalNumbers.get(i+1));
+                tempResult = Double.parseDouble(evalNumbers.get(i)) *
+                        Double.parseDouble(evalNumbers.get(i+1));
                 evalNumbers.set(i, String.valueOf(tempResult));
                 evalNumbers.remove(i+1);
                 evalOperands.remove(i);
             }
             else if(evalOperands.get(i) == Operation.Division){
-                tempResult = Double.parseDouble(evalNumbers.get(i)) / Double.parseDouble(evalNumbers.get(i+1));
+                tempResult = Double.parseDouble(evalNumbers.get(i)) /
+                        Double.parseDouble(evalNumbers.get(i+1));
                 evalNumbers.set(i, String.valueOf(tempResult));
                 evalNumbers.remove(i+1);
                 evalOperands.remove(i);
@@ -113,20 +114,19 @@ class ParseEngine{
                 i++;
             }
         }
-    }
-
-    private void evalLowPriority(){
-        int i = 0;
-        double tempResult;
+        
+        i = 0;
         while(countOperands(Operation.Plus, Operation.Minus) != 0){
             if(evalOperands.get(i) == Operation.Plus){
-                tempResult = Double.parseDouble(evalNumbers.get(i)) + Double.parseDouble(evalNumbers.get(i+1));
+                tempResult = Double.parseDouble(evalNumbers.get(i)) +
+                        Double.parseDouble(evalNumbers.get(i+1));
                 evalNumbers.set(i, String.valueOf(tempResult));
                 evalNumbers.remove(i+1);
                 evalOperands.remove(i);
             }
             else if(evalOperands.get(i) == Operation.Minus){
-                tempResult = Double.parseDouble(evalNumbers.get(i)) - Double.parseDouble(evalNumbers.get(i+1));
+                tempResult = Double.parseDouble(evalNumbers.get(i)) -
+                        Double.parseDouble(evalNumbers.get(i+1));
                 evalNumbers.set(i, String.valueOf(tempResult));
                 evalNumbers.remove(i+1);
                 evalOperands.remove(i);

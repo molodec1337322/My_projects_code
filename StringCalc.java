@@ -12,7 +12,7 @@ public class Main {
 
         ParseEngine parser = new ParseEngine();
         parser.setExample(example);
-        parser.getResult();
+        System.out.println(parser.getResult());
     }
 }
 
@@ -92,6 +92,12 @@ class ParseEngine{
         return count;
     }
 
+    private void editEvals(int index, double result){
+        evalNumbers.set(index, String.valueOf(result));
+        evalNumbers.remove(index+1);
+        evalOperands.remove(index);
+    }
+
     private void eval(){
         int i = 0;
         double tempResult;
@@ -99,37 +105,29 @@ class ParseEngine{
             if(evalOperands.get(i) == Operation.Multiply){
                 tempResult = Double.parseDouble(evalNumbers.get(i)) *
                         Double.parseDouble(evalNumbers.get(i+1));
-                evalNumbers.set(i, String.valueOf(tempResult));
-                evalNumbers.remove(i+1);
-                evalOperands.remove(i);
+                editEvals(i, tempResult);
             }
             else if(evalOperands.get(i) == Operation.Division){
                 tempResult = Double.parseDouble(evalNumbers.get(i)) /
                         Double.parseDouble(evalNumbers.get(i+1));
-                evalNumbers.set(i, String.valueOf(tempResult));
-                evalNumbers.remove(i+1);
-                evalOperands.remove(i);
+                editEvals(i, tempResult);
             }
             else{
                 i++;
             }
         }
-        
+
         i = 0;
         while(countOperands(Operation.Plus, Operation.Minus) != 0){
             if(evalOperands.get(i) == Operation.Plus){
                 tempResult = Double.parseDouble(evalNumbers.get(i)) +
                         Double.parseDouble(evalNumbers.get(i+1));
-                evalNumbers.set(i, String.valueOf(tempResult));
-                evalNumbers.remove(i+1);
-                evalOperands.remove(i);
+                editEvals(i, tempResult);
             }
             else if(evalOperands.get(i) == Operation.Minus){
                 tempResult = Double.parseDouble(evalNumbers.get(i)) -
                         Double.parseDouble(evalNumbers.get(i+1));
-                evalNumbers.set(i, String.valueOf(tempResult));
-                evalNumbers.remove(i+1);
-                evalOperands.remove(i);
+                editEvals(i, tempResult);
             }
             else{
                 i++;

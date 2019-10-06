@@ -143,7 +143,11 @@ class ParseEngine{
 
             int i = getHighestPriorityIndex(true);
             double tempResult;
-            while(getHighestPriorityIndex(true) != -1){
+            while(i != -1){
+                i = getHighestPriorityIndex(true);
+                if(i == -1){
+                    break;
+                }
                 if(operands.get(i) == Operands.Multiply){
                     tempResult = Double.parseDouble(numbers.get(i)) * Double.parseDouble(numbers.get(i+1));
                     editNumbersOperands(i, tempResult);
@@ -152,16 +156,14 @@ class ParseEngine{
                     tempResult = Double.parseDouble(numbers.get(i)) / Double.parseDouble(numbers.get(i+1));
                     editNumbersOperands(i, tempResult);
                 }
-                else{
-                    i = getHighestPriorityIndex(true);
-                    if(i == -1){
-                        break;
-                    }
-                }
             }
 
             i = getHighestPriorityIndex(false);
-            while(getHighestPriorityIndex(false) != -1){
+            while(i != -1){
+                i = getHighestPriorityIndex(false);
+                if(i == -1){
+                    break;
+                }
                 if(operands.get(i) == Operands.Plus){
                     tempResult = Double.parseDouble(numbers.get(i)) + Double.parseDouble(numbers.get(i+1));
                     editNumbersOperands(i, tempResult);
@@ -169,12 +171,6 @@ class ParseEngine{
                 else if(operands.get(i) == Operands.Minus){
                     tempResult = Double.parseDouble(numbers.get(i)) - Double.parseDouble(numbers.get(i+1));
                     editNumbersOperands(i, tempResult);
-                }
-                else{
-                    i = getHighestPriorityIndex(false);
-                    if(i == -1){
-                        break;
-                    }
                 }
             }
         }

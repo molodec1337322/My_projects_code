@@ -90,26 +90,15 @@ class ParseEngine{
     }
 
     //возвращает индекс операнда с наибольшим приоритетом
-    private int getHighestPriorityIndex(boolean isHighPriority){
+    private int getHighestPriorityIndex(Operands operandFirst, Operands operandsSecond){
         int priorityIndex = getHighestPriority();
-        if(isHighPriority){
-            for(int i = 0; i < priority.size(); i++){
-                if(priority.get(i) == priorityIndex &&
-                        (operands.get(i) == Operands.Division || operands.get(i) == Operands.Multiply)){
-                    return i;
-                }
+        for(int i = 0; i < priority.size(); i++){
+            if(priority.get(i) == priorityIndex &&
+                   (operands.get(i) == operandFirst || operands.get(i) == operandsSecond)){
+                return i;
             }
-            return -1;
         }
-        else{
-            for(int i = 0; i < priority.size(); i++){
-                if(priority.get(i) == priorityIndex &&
-                        (operands.get(i) == Operands.Minus || operands.get(i) == Operands.Plus)){
-                    return i;
-                }
-            }
-            return -1;
-        }
+        return -1;
     }
 
     //возвращает наибольший приоритет
@@ -141,10 +130,10 @@ class ParseEngine{
     private void eval(){
         while(operands.size() > 0){
 
-            int i = getHighestPriorityIndex(true);
+            int i = getHighestPriorityIndex(Operands.Multiply, Operands.Division);
             double tempResult;
             while(i != -1){
-                i = getHighestPriorityIndex(true);
+                i = getHighestPriorityIndex(Operands.Multiply, Operands.Division);
                 if(i == -1){
                     break;
                 }
@@ -158,9 +147,9 @@ class ParseEngine{
                 }
             }
 
-            i = getHighestPriorityIndex(false);
+            i = getHighestPriorityIndex(Operands.Plus, Operands.Minus);
             while(i != -1){
-                i = getHighestPriorityIndex(false);
+                i = getHighestPriorityIndex(Operands.Plus, Operands.Minus);
                 if(i == -1){
                     break;
                 }

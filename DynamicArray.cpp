@@ -69,6 +69,14 @@ public:
 			cout << "\nLast possible position: " << size - 1 << " called: " << position;
 		}
 	}
+	
+	//очищает массив
+	void clear()
+	{
+		delete[] arr;
+		this->size = 0;
+		this->arr = new int[size];
+	}
 
 	//выводит все элементы массива
 	void showArr()

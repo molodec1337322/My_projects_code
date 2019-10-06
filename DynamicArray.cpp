@@ -20,10 +20,10 @@ public:
 	//добавляет элемент в массив
 	void append(int value)
 	{
-		int newSize = size + 1;
+		unsigned int newSize = size + 1;
 		int* newArr = new int[newSize];
 
-		for (int i = 0; i < size; i++)
+		for (unsigned int i = 0; i < size; i++)
 		{
 			*(newArr + i) = *(arr + i);
 		}
@@ -36,9 +36,9 @@ public:
 	//удаляет последний элемент массива
 	void deleteLast()
 	{
-		int newSize = size - 1;
+		unsigned int newSize = size - 1;
 		int* newArr = new int[newSize];
-		for (int i = 0; i < newSize; i++)
+		for (unsigned int i = 0; i < newSize; i++)
 		{
 			*(newArr + i) = *(arr + i);
 		}
@@ -52,12 +52,12 @@ public:
 	{
 		if (position < size)
 		{
-			int newSize = size - 1;
+			unsigned int newSize = size - 1;
 			int* newArr = new int[newSize];
-			for (int i = 0; i < size; i++)
+			for (unsigned int i = 0; i < size; i++)
 			{
-				if (i != position) *(newArr + i) = *(arr + i);
-				else continue;
+				if (i < position) *(newArr + i) = *(arr + i);
+				else if (i > position) *(newArr + i - 1) = *(arr + i);
 			}
 			delete[] arr;
 			this->size = newSize;
@@ -77,7 +77,7 @@ public:
 
 		if (size > 0)
 		{
-			for (int i = 0; i < size; i++)
+			for (unsigned int i = 0; i < size; i++)
 				cout << *(arr + i) << " ";
 		}
 
@@ -124,7 +124,6 @@ public:
 		return size;
 	}
 };
-
 
 
 int main()

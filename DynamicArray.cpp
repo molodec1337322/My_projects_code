@@ -5,6 +5,7 @@ using namespace std;
 
 class DynamicArray
 {
+
 private:
 	unsigned int size;
 	int* arr;
@@ -46,6 +47,29 @@ public:
 		this->arr = newArr;
 	}
 
+	//удаляет элемент из массива
+	void remove(unsigned int position)
+	{
+		if (position < size)
+		{
+			int newSize = size - 1;
+			int* newArr = new int[newSize];
+			for (int i = 0; i < size; i++)
+			{
+				if (i != position) *(newArr + i) = *(arr + i);
+				else continue;
+			}
+			delete[] arr;
+			this->size = newSize;
+			this->arr = newArr;
+		}
+		else
+		{
+			cout << "Error! Can\'t remove element from " << position << " position";
+			cout << "\nLast possible position: " << size - 1 << " called: " << position;
+		}
+	}
+
 	//выводит все элементы массива
 	void showArr()
 	{
@@ -68,7 +92,7 @@ public:
 	//возвращает значение элемента в указанной позиции
 	int get(unsigned int position)
 	{
-		if (position < size && position >= 0)
+		if (position < size)
 		{
 			return *(arr + position);
 		}

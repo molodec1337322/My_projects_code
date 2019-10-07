@@ -65,7 +65,7 @@ public:
 		}
 		else
 		{
-			cout << "Error! Can\'t remove element from " << position << " position";
+			cout << "\n\nError! Can\'t remove element from " << position << " position";
 			cout << "\nLast possible position: " << size - 1 << " called: " << position;
 		}
 	}
@@ -122,7 +122,7 @@ public:
 		}
 		else 
 		{
-			cout << "Error! Can\'t put element to " << position << " position";
+			cout << "\n\nError! Can\'t put element to " << position << " position";
 			cout << "\nLast possible position: " << size - 1 << " called: " << position;
 		}
 	}

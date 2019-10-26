@@ -1,6 +1,6 @@
 using System;
 
-namespace StringCalc
+namespace DynamicArray
 {
     class Program
     {

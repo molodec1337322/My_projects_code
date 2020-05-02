@@ -11,7 +11,6 @@ Y = deaths
 b = linalg.inv(X.T.dot(X)).dot(X.T).dot(Y)
 epsilon = Y - X.dot(b)
 err = epsilon.T.dot(epsilon)
-print(err)
 
 print("Введите количество: ")
 user_confirmed = int(input())

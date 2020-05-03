@@ -9,13 +9,13 @@ deaths = np.array([[243998], [206917], [177412], [145430], [108740], [0]])
 X = confirmed
 Y = deaths
 
-b = linalg.inv(X.T.dot(X)).dot(X.T).dot(Y)
-epsilon = Y - X.dot(b)
+m, c = linalg.lstsq(X, Y, rcond=None)[0]
+epsilon = Y - X.dot((m, c))
 err = epsilon.T.dot(epsilon)
 
 
 x = np.arange(5000000)
-y = b[0] + b[1] * x
+y = m + c * x
 
 fig = plt.figure()
 for i in range(deaths.size):
@@ -25,4 +25,4 @@ plt.plot(x, y, label='line', color='red')
 
 plt.show()
 
-print(b, err)
+print((m, c), err)
